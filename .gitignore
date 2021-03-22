@@ -1,3 +1,4 @@
 # Project exclude paths
 /venv/
 /db.sqlite3
+/MyCalendarApp/settings.py
