@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -53,11 +52,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'MyCalendarApp.urls'
 
+EMAIL_FILE_PATH = "/sent_mails/"
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
