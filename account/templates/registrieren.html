@@ -10,27 +10,29 @@
           <div class="row">
             <div class="col-md-9 col-lg-8 mx-auto">
               <h1 class="login-heading mb-4">MyCalendar App</h1>
-                <h3 class="login-heading mb-4">Willkommen zurück</h3>
+                <h3 class="login-heading mb-4">Registrieren</h3>
               <form>
                 <div class="form-label-group">
                   <input type="email" id="inputEmail" class="form-control" placeholder="E-Mail Adresse" required autofocus>
                   <label for="inputEmail">E-Mail Adresse</label>
                 </div>
+                  <div class="form-label-group">
+                  <input type="text" id="inputNickname" class="form-control" placeholder="Nickname" required autofocus>
+                  <label for="inputEmail">Nickname</label>
+                </div>
 
                 <div class="form-label-group">
-                  <input type="password" id="inputPassword" class="form-control" placeholder="Passwort" required>
+                  <input type="password" id="inputPassword1" class="form-control" placeholder="Passwort" required>
                   <label for="inputPassword">Passwort</label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Login</button>
-                  <a href="{% url 'registrieren' %}" class="btn btn-outline-primary btn-block btn-login text-uppercase font-weight-bold mb-2"> Registrieren</a>
+                  <div class="form-label-group">
+                  <input type="password" id="inputPassword2" class="form-control" placeholder="Passwort" required>
+                  <label for="inputPassword">Bestätige Passwort</label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Anmelden</button>
                 <div class="text-center">
                   <a class="small" href="#">Passwort vergessen?</a></div>
               </form>
-                <p style="margin-top: 128px;">
-                <small>
-                    Photo by <a href="https://unsplash.com/@nate_dumlao?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Nathan Dumlao</a> on <a href="/s/photos/calendar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-                </small>
-                </p>
             </div>
           </div>
         </div>

@@ -21,7 +21,8 @@ from MyCalendarApp import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account/', include('account.urls'))
+    path('', include('account.urls'))
+
 ]
 
 if settings.DEBUG:
