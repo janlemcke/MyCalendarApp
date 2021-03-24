@@ -52,7 +52,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'MyCalendarApp.urls'
 
-EMAIL_FILE_PATH = "/sent_mails/"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 
 
