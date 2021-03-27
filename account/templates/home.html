@@ -1,10 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-Du bist als {{request.user.email}} eingeloggt!
-</body>
-</html>
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<style>
+
+td{
+    border-style: none;
+}
+</style>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="calendar" class="d-none d-md-flex col-md-4 col-lg-8 p-3"></div>
+            <div class="col-md-8 col-lg-4">
+                <div class="login d-flex py-2">
+                    <div class="container">
+                        <h1 class="login-heading">MyCalendar App</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                themeSystem: 'bootstrap',
+                locale: 'de',
+                firstDay: 1,
+                height: '100',
+                initialView: 'dayGridMonth'
+            });
+            calendar.render();
+        });
+
+    </script>
+{% endblock content %}
