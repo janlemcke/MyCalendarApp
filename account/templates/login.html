@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 
 <div class="container-fluid">
@@ -11,20 +12,18 @@
             <div class="col-md-9 col-lg-8 mx-auto">
               <h1 class="login-heading mb-4">MyCalendar App</h1>
                 <h3 class="login-heading mb-4">Willkommen zurück</h3>
-              <form>
+              <form method="post">{% csrf_token %}
                 <div class="form-label-group">
-                  <input type="email" id="inputEmail" class="form-control" placeholder="E-Mail Adresse" required autofocus>
-                  <label for="inputEmail">E-Mail Adresse</label>
+                  {% render_field form.email class="form-control" %}
+                  <label for="id_email">E-Mail Adresse</label>
+                    {{ form.email.errors }}
                 </div>
-
                 <div class="form-label-group">
-                  <input type="password" id="inputPassword" class="form-control" placeholder="Passwort" required>
-                  <label for="inputPassword">Passwort</label>
+                  {% render_field form.password class="form-control" type="password" %}
+                  <label for="id_password">Passwort</label>
+                    {{ form.password.errors }}
                 </div>
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Login</button>
-                  <a href="{% url 'registrieren' %}" class="btn btn-outline-primary btn-block btn-login text-uppercase font-weight-bold mb-2"> Registrieren</a>
-                <div class="text-center">
-                  <a class="small" href="{% url 'password_reset' %}">Passwort vergessen?</a></div>
               </form>
                 <p style="margin-top: 128px;">
                 <small>

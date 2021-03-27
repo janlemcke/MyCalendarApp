@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 
 <div class="container-fluid">
@@ -11,23 +12,27 @@
             <div class="col-md-9 col-lg-8 mx-auto">
               <h1 class="login-heading mb-4">MyCalendar App</h1>
                 <h3 class="login-heading mb-4">Registrieren</h3>
-              <form>
+              <form method="POST">{% csrf_token %}
                 <div class="form-label-group">
-                  <input type="email" id="inputEmail" class="form-control" placeholder="E-Mail Adresse" required autofocus>
-                  <label for="inputEmail">E-Mail Adresse</label>
+                    {% render_field form.email class="form-control" %}
+                  <label for="id_email">E-Mail Adresse</label>
+                    {{ form.email.errors }}
                 </div>
                   <div class="form-label-group">
-                  <input type="text" id="inputNickname" class="form-control" placeholder="Nickname" required autofocus>
-                  <label for="inputEmail">Nickname</label>
+                  {% render_field form.nick_name class="form-control" %}
+                  <label for="id_nick_name">Nickname</label>
+                      {{ form.nick_name.errors }}
                 </div>
 
                 <div class="form-label-group">
-                  <input type="password" id="inputPassword1" class="form-control" placeholder="Passwort" required>
-                  <label for="inputPassword1">Passwort</label>
+                  {% render_field form.password1 class="form-control" %}
+                  <label for="id_password_1">Passwort</label>
+                    {{ form.password1.errors }}
                 </div>
                   <div class="form-label-group">
-                  <input type="password" id="inputPassword2" class="form-control" placeholder="Bestätige Passwort" required>
-                  <label for="inputPassword2">Bestätige Passwort</label>
+                  {% render_field form.password2 class="form-control" %}
+                  <label for="id_password_2">Bestätige Passwort</label>
+                      {{ form.password2.errors }}
                 </div>
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Registrieren</button>
               </form>
