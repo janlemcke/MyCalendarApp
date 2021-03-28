@@ -1,12 +1,11 @@
 from django.urls import path
-from account.views import registerView, homeView, logoutView, loginView
+from account.views import registerView, logoutView, loginView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', loginView, name="login"),
     path('logout', logoutView, name="logout"),
     path('registrieren', registerView, name="registrieren"),
-    path('home', homeView, name="home"),
 
     # Password reset links (ref: https://github.com/django/django/blob/master/django/contrib/auth/views.py)
     path('account/password_change/done/',

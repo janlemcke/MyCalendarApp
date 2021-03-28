@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<style>
+
+    td {
+        border-style: none;
+    }
+</style>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="calendar" class="d-none d-md-flex col-md-4 col-lg-8 p-3"></div>
+            <div class="col-md-8 col-lg-4">
+                <div class="login d-flex py-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h1 class="login-heading mb-4">MyCalendar App</h1>
+                                <h3 class="login-heading mb-4">Kalender erstellen</h3>
+                                <form method="post">{% csrf_token %}
+                                    <div class="form-label-group">
+                                        {% render_field form.name class="form-control" %}
+                                        <label for="id_owner">Name des Kalenders</label>
+                                        {{ form.name.errors }}
+                                    </div>
+                                    <div class="form-label-group">
+                                        {% render_field form.visible_for class="form-control" %}
+                                        <label for="id_visible_for">Sichtbar für:</label>
+                                        {{ form.visible_for.errors }}
+                                    </div>
+                                    <div class="form-label-group">
+                                        {% render_field form.editable_by class="form-control"%}
+                                        <label for="id_editable_by">Bearbeitbar durch:</label>
+                                        {{ form.editable_by.errors }}
+                                    </div>
+                                    <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
+                                            type="submit">Erstellen
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                themeSystem: 'bootstrap',
+                locale: 'de',
+                firstDay: 1,
+                height: '100',
+                initialView: 'dayGridMonth'
+            });
+            calendar.render();
+        });
+
+    </script>
+{% endblock content %}

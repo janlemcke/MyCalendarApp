@@ -1,13 +1,8 @@
 from django.contrib.auth import logout, login, authenticate
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from account.forms import RegistrationForm, AccountAuthenticationForm
 
 # Create your views here.
-
-@login_required
-def homeView(request):
-    return render(request, "home.html")
 
 def loginView(request):
     context = {}

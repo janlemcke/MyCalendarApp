@@ -32,6 +32,7 @@ LOGIN_REDIRECT_URL = 'home'
 # Application definition
 INSTALLED_APPS = [
     'account',
+    'mycalendar',
 
     'widget_tweaks',
 
