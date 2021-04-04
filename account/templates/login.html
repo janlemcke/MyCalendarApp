@@ -24,6 +24,9 @@
                     {{ form.password.errors }}
                 </div>
                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Login</button>
+              <a href="{% url 'registrieren' %}" class="btn btn-outline-primary btn-block btn-login text-uppercase font-weight-bold mb-2"> Registrieren</a>
+                <div class="text-center">
+                  <a class="small" href="{% url 'password_reset' %}">Passwort vergessen?</a></div>
               </form>
                 <p style="margin-top: 128px;">
                 <small>
