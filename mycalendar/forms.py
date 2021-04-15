@@ -4,8 +4,8 @@ from mycalendar.models import Calendar, Event
 from account.models import Account
 
 class CalendarForm(forms.ModelForm):
-    visible_for = forms.CharField()
-    editable_by = forms.CharField()
+    visible_for = forms.CharField(required=False)
+    editable_by = forms.CharField(required=False)
 
     class Meta:
         model = Calendar

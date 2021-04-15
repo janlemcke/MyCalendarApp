@@ -16,8 +16,6 @@ def homeView(request):
             calendar.save()
             print(calendar)
 
-    calendars = Calendar.objects.filter(owner=request.user)
-
     form = CalendarForm()
     context["form"] = form
 

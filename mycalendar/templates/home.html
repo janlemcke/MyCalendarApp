@@ -20,7 +20,7 @@
                                 <form method="post">{% csrf_token %}
                                     <div class="form-label-group">
                                         {% render_field form.name class="form-control" %}
-                                        <label for="id_owner">Name des Kalenders</label>
+                                        <label for="id_name">Name des Kalenders</label>
                                         {{ form.name.errors }}
                                     </div>
                                     <div class="form-label-group">
