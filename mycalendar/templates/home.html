@@ -143,8 +143,19 @@
             input_visible_for = document.getElementById('id_visible_for');
             input_editable_by = document.getElementById('id_editable_by');
             input_calendar_id = document.getElementById('id_calendar_id');
-            calendarChanged()
+
+            if(calendars.length > 0){
+                calendarChanged();
+            }else {
+
+                deactivateInputs();
+            }
+
         });
+
+        function deactivateInputs(){
+            document.getElementById('editcalendar-tab').classList.add("disabled");
+        }
 
         function calendarChanged(){
             calendars.forEach(element => {
