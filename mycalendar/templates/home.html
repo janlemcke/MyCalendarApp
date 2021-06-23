@@ -40,13 +40,15 @@
                                     <div class="tab-pane fade" id="editcalendar" role="tabpanel"
                                          aria-labelledby="editcalendar-tab">
                                         <form method="post" class="mt-3">{% csrf_token %}
+                                            {{ editform.owner.as_hidden }}
+                                            {{ editform.calendar_id.as_hidden }}
                                             <div class="form-label-group">
-                                                {% render_field editform.calendars class="form-control" %}
+                                                {% render_field editform.calendars class="form-control" onchange="calendarChanged()" %}
                                                 {{ editform.calendars.errors }}
                                             </div>
                                             <div class="form-label-group">
                                                 {% render_field editform.name class="form-control" %}
-                                                <label for="id_visible_for">Name:</label>
+                                                <label for="id_name">Name:</label>
                                                 {{ editform.name.errors }}
                                             </div>
                                             <div class="form-label-group">
@@ -58,10 +60,33 @@
                                                 {% render_field editform.editable_by class="form-control" %}
                                                 <label for="id_editable_by">Bearbeitbar durch:</label>
                                                 {{ editform.editable_by.errors }}
+                                                {{ editform.errors }}
                                             </div>
                                             <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
                                                     type="submit" name="action" value="edit">Änderung speichern
                                             </button>
+                                            <button class="btn btn-lg btn-danger btn-block btn-login text-uppercase font-weight-bold mb-2" type="button" data-toggle="modal" data-target="#deleteModal">Kalender löschen
+                                            </button>
+                                            <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Löschen eines Kalenders</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Möchtest du den Kalender wirklich löschen?</p>
+          <small>Alle damit verbundenen Events werden ebenfalls unwiderruflich gelöscht.</small>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Doch nicht</button>
+        <button class="btn btn-danger" type="submit" name="action" value="delete">Weg damit!</button>
+      </div>
+    </div>
+  </div>
+</div>
                                         </form>
                                     </div>
                                     <div class="tab-pane fade" id="createcalendar" role="tabpanel"
@@ -95,9 +120,12 @@
             </div>
         </div>
     </div>
+
+    {{ calendars|json_script:"calendar_data" }}
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {
+            // Initialize calendar
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 themeSystem: 'bootstrap',
@@ -107,7 +135,27 @@
                 initialView: 'dayGridMonth'
             });
             calendar.render();
+
+            // Calendar edit form
+            calendars = JSON.parse(JSON.parse(document.getElementById('calendar_data').textContent));
+            input_calendars = document.getElementById('id_calendars');
+            input_name = document.getElementById('id_name');
+            input_visible_for = document.getElementById('id_visible_for');
+            input_editable_by = document.getElementById('id_editable_by');
+            input_calendar_id = document.getElementById('id_calendar_id');
+            calendarChanged()
         });
+
+        function calendarChanged(){
+            calendars.forEach(element => {
+                if (element.calendar_id === parseInt(input_calendars.value)) {
+                    input_name.value = element.name;
+                    input_visible_for.value = element.visible_for;
+                    input_editable_by.value = element.editable_by;
+                    input_calendar_id.value = element.calendar_id;
+                }
+            });
+        }
 
     </script>
 {% endblock content %}

@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'mycalendar',
 
     'widget_tweaks',
+    'rest_framework',
 
     'django.contrib.admin',
     'django.contrib.auth',

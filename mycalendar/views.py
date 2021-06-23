@@ -1,8 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from rest_framework.utils import json
 
 from mycalendar.forms import CalendarForm, CalendarEditForm
-from mycalendar.models import Calendar, Event
+from mycalendar.models import Calendar
+from mycalendar.serializers import CalendarSerializer
+
 
 @login_required
 def homeView(request):
@@ -12,22 +15,23 @@ def homeView(request):
         if request.POST['action'] == 'create':
             form = CalendarForm(request.POST)
             if form.is_valid():
-                calendar = form.save(commit=False)
-                calendar.owner_id = request.user.pk
-                calendar.save()
+                form.set_owner(request.user)
+                form.save()
 
         if request.POST['action'] == 'edit':
             form = CalendarEditForm(request.POST)
             if form.is_valid():
-                calendar = form.save(commit=False)
-                calendar.owner_id = request.user.pk
-                calendar.save()
+                form.save(commit=True)
 
-    calendars = Calendar.objects.filter(owner=request.user)
+        if request.POST['action'] == 'delete':
+            calendar = Calendar.objects.get(calendar_id=request.POST["calendar_id"])
+            if calendar.owner == request.user:
+                calendar.delete()
 
-    createform = CalendarForm()
-    editform = CalendarEditForm(initial={"user_id": request.user.pk})
-    context["createform"] = createform
-    context["editform"] = editform
+    queryset = Calendar.objects.filter(owner=request.user.pk)
+    context["calendars"] = json.dumps(CalendarSerializer(queryset, many=True).data)
+
+    context["createform"] = CalendarForm()
+    context["editform"] = CalendarEditForm(initial={"user_id": request.user.pk, "owner": request.user})
 
     return render(request, "home.html", context)
