@@ -1,117 +1,107 @@
-{% extends 'base.html' %}
-{% load widget_tweaks %}
-{% block content %}
-    <style>
-
-        td {
-            border-style: none;
-        }
-    </style>
-    <div class="container-fluid">
-        <div class="row">
-            <div id="calendar" class="d-none d-md-flex col-md-4 col-lg-8 p-3"></div>
-            <div class="col-md-8 col-lg-4">
-                <div class="login d-flex py-3">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h1 class="login-heading mb-4">MyCalendar App</h1>
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link active" id="mycalendars-tab" data-toggle="tab"
-                                           href="#mycalendars"
-                                           role="tab" aria-controls="mycalendars" aria-selected="true">Meine
-                                            Kalender</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" id="editcalendar-tab" data-toggle="tab" href="#editcalendar"
-                                           role="tab" aria-controls="editcalendar" aria-selected="false">Bearbeiten</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a class="nav-link" id="createcalendar-tab" data-toggle="tab"
-                                           href="#createcalendar"
-                                           role="tab" aria-controls="createcalendar" aria-selected="false">Erstellen</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="mycalendars" role="tabpanel"
-                                         aria-labelledby="mycalendars-tab">...
+{% extends 'base.html' %} {% load widget_tweaks %} {% block content %}
+<style>
+    td {
+        border-style: none;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div id="calendar" class="d-none d-md-flex col-md-4 col-lg-8 p-3"></div>
+        <div class="col-md-8 col-lg-4">
+            <div class="login d-flex py-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="login-heading mb-4">MyCalendar App</h1>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="mycalendars-tab" data-toggle="tab" href="#mycalendars" role="tab" aria-controls="mycalendars" aria-selected="true">Meine Kalender</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="editcalendar-tab" data-toggle="tab" href="#editcalendar" role="tab" aria-controls="editcalendar" aria-selected="false">Bearbeiten</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="createcalendar-tab" data-toggle="tab" href="#createcalendar" role="tab" aria-controls="createcalendar" aria-selected="false">Erstellen</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="mycalendars" role="tabpanel" aria-labelledby="mycalendars-tab">
+                                    <div class="row mt-3">
+                                        <ul class="list-group col-md-12">
+                                            {% for calendar in my_calendars %}
+                                            <li class="list-group-item ml-3">
+                                                {{ calendar.name }}
+                                                <a type="button" class="btn btn-sm btn-outline-secondary float-right" href="#">Anzeigen</a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
                                     </div>
-                                    <div class="tab-pane fade" id="editcalendar" role="tabpanel"
-                                         aria-labelledby="editcalendar-tab">
-                                        <form method="post" class="mt-3">{% csrf_token %}
-                                            {{ editform.owner.as_hidden }}
-                                            {{ editform.calendar_id.as_hidden }}
-                                            <div class="form-label-group">
-                                                {% render_field editform.calendars class="form-control" onchange="calendarChanged()" %}
-                                                {{ editform.calendars.errors }}
+                                </div>
+                                <div class="tab-pane fade" id="editcalendar" role="tabpanel" aria-labelledby="editcalendar-tab">
+                                    <form method="post" class="mt-3">
+                                        {% csrf_token %} {{ editform.owner.as_hidden }} {{ editform.calendar_id.as_hidden }}
+                                        <div class="form-label-group">
+                                            {% render_field editform.calendars class="form-control" onchange="calendarChanged()" %} {{ editform.calendars.errors }}
+                                        </div>
+                                        <div class="form-label-group">
+                                            {% render_field editform.name class="form-control" %}
+                                            <label for="id_name">Name:</label>
+                                            {{ editform.name.errors }}
+                                        </div>
+                                        <div class="form-label-group">
+                                            {% render_field editform.visible_for class="form-control" %}
+                                            <label for="id_visible_for">Sichtbar für:</label>
+                                            {{ editform.visible_for.errors }}
+                                        </div>
+                                        <div class="form-label-group">
+                                            {% render_field editform.editable_by class="form-control" %}
+                                            <label for="id_editable_by">Bearbeitbar durch:</label>
+                                            {{ editform.editable_by.errors }} {{ editform.errors }}
+                                        </div>
+                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="edit">Änderung speichern</button>
+                                        <button class="btn btn-lg btn-danger btn-block btn-login text-uppercase font-weight-bold mb-2" type="button" data-toggle="modal" data-target="#deleteModal">Kalender löschen</button>
+                                        <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Löschen eines Kalenders</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Möchtest du den Kalender wirklich löschen?</p>
+                                                        <small>Alle damit verbundenen Events werden ebenfalls unwiderruflich gelöscht.</small>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Doch nicht</button>
+                                                        <button class="btn btn-danger" type="submit" name="action" value="delete">Weg damit!</button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-label-group">
-                                                {% render_field editform.name class="form-control" %}
-                                                <label for="id_name">Name:</label>
-                                                {{ editform.name.errors }}
-                                            </div>
-                                            <div class="form-label-group">
-                                                {% render_field editform.visible_for class="form-control" %}
-                                                <label for="id_visible_for">Sichtbar für:</label>
-                                                {{ editform.visible_for.errors }}
-                                            </div>
-                                            <div class="form-label-group">
-                                                {% render_field editform.editable_by class="form-control" %}
-                                                <label for="id_editable_by">Bearbeitbar durch:</label>
-                                                {{ editform.editable_by.errors }}
-                                                {{ editform.errors }}
-                                            </div>
-                                            <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
-                                                    type="submit" name="action" value="edit">Änderung speichern
-                                            </button>
-                                            <button class="btn btn-lg btn-danger btn-block btn-login text-uppercase font-weight-bold mb-2" type="button" data-toggle="modal" data-target="#deleteModal">Kalender löschen
-                                            </button>
-                                            <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Löschen eines Kalenders</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Möchtest du den Kalender wirklich löschen?</p>
-          <small>Alle damit verbundenen Events werden ebenfalls unwiderruflich gelöscht.</small>
-      </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Doch nicht</button>
-        <button class="btn btn-danger" type="submit" name="action" value="delete">Weg damit!</button>
-      </div>
-    </div>
-  </div>
-</div>
-                                        </form>
-                                    </div>
-                                    <div class="tab-pane fade" id="createcalendar" role="tabpanel"
-                                         aria-labelledby="createcalendar-tab">
-                                        <form method="post" class="mt-3">{% csrf_token %}
-                                            <div class="form-label-group">
-                                                {% render_field createform.name class="form-control" %}
-                                                <label for="id_owner">Name des Kalenders</label>
-                                                {{ createform.name.errors }}
-                                            </div>
-                                            <div class="form-label-group">
-                                                {% render_field createform.visible_for class="form-control" %}
-                                                <label for="id_visible_for">Sichtbar für:</label>
-                                                {{ createform.visible_for.errors }}
-                                            </div>
-                                            <div class="form-label-group">
-                                                {% render_field createform.editable_by class="form-control" %}
-                                                <label for="id_editable_by">Bearbeitbar durch:</label>
-                                                {{ createform.editable_by.errors }}
-                                            </div>
-                                            <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2"
-                                                    type="submit" name="action" value="create">Erstellen
-                                            </button>
-                                        </form>
-                                    </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="createcalendar" role="tabpanel" aria-labelledby="createcalendar-tab">
+                                    <form method="post" class="mt-3">
+                                        {% csrf_token %}
+                                        <div class="form-label-group">
+                                            {% render_field createform.name class="form-control" %}
+                                            <label for="id_owner">Name des Kalenders</label>
+                                            {{ createform.name.errors }}
+                                        </div>
+                                        <div class="form-label-group">
+                                            {% render_field createform.visible_for class="form-control" %}
+                                            <label for="id_visible_for">Sichtbar für:</label>
+                                            {{ createform.visible_for.errors }}
+                                        </div>
+                                        <div class="form-label-group">
+                                            {% render_field createform.editable_by class="form-control" %}
+                                            <label for="id_editable_by">Bearbeitbar durch:</label>
+                                            {{ createform.editable_by.errors }}
+                                        </div>
+                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create">Erstellen</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -120,53 +110,50 @@
             </div>
         </div>
     </div>
+</div>
 
-    {{ calendars|json_script:"calendar_data" }}
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Initialize calendar
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                themeSystem: 'bootstrap',
-                locale: 'de',
-                firstDay: 1,
-                height: '100',
-                initialView: 'dayGridMonth'
-            });
-            calendar.render();
-
-            // Calendar edit form
-            calendars = JSON.parse(JSON.parse(document.getElementById('calendar_data').textContent));
-            input_calendars = document.getElementById('id_calendars');
-            input_name = document.getElementById('id_name');
-            input_visible_for = document.getElementById('id_visible_for');
-            input_editable_by = document.getElementById('id_editable_by');
-            input_calendar_id = document.getElementById('id_calendar_id');
-
-            if(calendars.length > 0){
-                calendarChanged();
-            }else {
-
-                deactivateInputs();
-            }
-
+{{ calendars|json_script:"calendar_data" }}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize calendar
+        var calendarEl = document.getElementById("calendar");
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            themeSystem: "bootstrap",
+            locale: "de",
+            firstDay: 1,
+            height: "100",
+            initialView: "dayGridMonth",
         });
+        calendar.render();
 
-        function deactivateInputs(){
-            document.getElementById('editcalendar-tab').classList.add("disabled");
+        // Calendar edit form
+        calendars = JSON.parse(JSON.parse(document.getElementById("calendar_data").textContent));
+        input_calendars = document.getElementById("id_calendars");
+        input_name = document.getElementById("id_name");
+        input_visible_for = document.getElementById("id_visible_for");
+        input_editable_by = document.getElementById("id_editable_by");
+        input_calendar_id = document.getElementById("id_calendar_id");
+
+        if (calendars.length > 0) {
+            calendarChanged();
+        } else {
+            deactivateInputs();
         }
+    });
 
-        function calendarChanged(){
-            calendars.forEach(element => {
-                if (element.calendar_id === parseInt(input_calendars.value)) {
-                    input_name.value = element.name;
-                    input_visible_for.value = element.visible_for;
-                    input_editable_by.value = element.editable_by;
-                    input_calendar_id.value = element.calendar_id;
-                }
-            });
-        }
+    function deactivateInputs() {
+        document.getElementById("editcalendar-tab").classList.add("disabled");
+    }
 
-    </script>
+    function calendarChanged() {
+        calendars.forEach((element) => {
+            if (element.calendar_id === parseInt(input_calendars.value)) {
+                input_name.value = element.name;
+                input_visible_for.value = element.visible_for;
+                input_editable_by.value = element.editable_by;
+                input_calendar_id.value = element.calendar_id;
+            }
+        });
+    }
+</script>
 {% endblock content %}

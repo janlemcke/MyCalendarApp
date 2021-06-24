@@ -34,4 +34,6 @@ def homeView(request):
     context["createform"] = CalendarForm()
     context["editform"] = CalendarEditForm(initial={"user_id": request.user.pk, "owner": request.user})
 
+    context["my_calendars"] = queryset
+
     return render(request, "home.html", context)
