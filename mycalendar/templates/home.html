@@ -12,25 +12,33 @@
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
     right: 0;
-  background-color: #111; /* Black*/
+  background-color: gray; /* Black*/
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 60px; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
 /* The navigation menu links */
-.sidenav a {
+.sidenav a{
   padding: 8px 8px 8px 32px;
   text-decoration: none;
-  font-size: 25px;
-  color: #818181;
+  font-size: 18px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav  h2{
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+  color: white;
   display: block;
   transition: 0.3s;
 }
 
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
-  color: #f1f1f1;
+  font-size: 24px;
 }
 
 /* Position and style the close button (top right corner) */
@@ -53,21 +61,21 @@
         <div id="calendar" class="d-none d-md-flex col-md-4 col-lg-8 p-3"></div>
         <div class="col-md-8 col-lg-4"  id="containerForSlideMenu">
         <div id="mySidenav" class="sidenav">
+
+        <h2>Einstellungen</h2>
           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-          <a href="#">About</a>
-          <a href="#">Services</a>
-          <a href="#">Clients</a>
-          <a href="#">Contact</a>
+          <a href="#">Profil</a>
+            <a href="{% url 'logout' %}">Ausloggen</a>
         </div>
             <div class="login d-flex py-3">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
-                        <div class="row">
+                        <div class="row my-2">
                             <div class="col-md-9">
-                            <h1 class="login-heading mb-4">MyCalendar App</h1>
+                            <h1 class="login-heading mb-4 my-auto">MyCalendar App</h1>
                             </div>
-                            <div class="col-md-3"  onclick="openNav()">
+                            <div class="col-md-3 my-auto"  onclick="openNav()" style="cursor:pointer;">
                                 Settings
                             </div>
                         </div>
