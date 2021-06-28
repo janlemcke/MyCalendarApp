@@ -82,7 +82,16 @@ class CalendarEditForm(CalendarForm):
 
         return calendar
 
-class EventForm(forms.ModelForm):
+class EventCreateForm(forms.ModelForm):
+
+    start_date = forms.DateTimeField(input_formats=["%d.%m.%Y %H:%M"])
+    end_date = forms.DateTimeField(input_formats=["%d.%m.%Y %H:%M"], required=False)
+
+    def set_calendar(self, calendar_id):
+        event = self.instance
+        event.calendar_id = calendar_id
+        self.instance = event
+
     class Meta:
         model = Event
-        exclude = ()
+        exclude = ('calendar',)

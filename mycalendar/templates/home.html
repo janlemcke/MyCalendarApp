@@ -86,14 +86,45 @@
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade show active" id="mycalendars" role="tabpanel" aria-labelledby="mycalendars-tab">
                                     <div class="row mt-3">
-                                        <ul class="list-group col-md-12">
+                                    <div class=" col-md-12">
+                                        <ul class="list-group">
                                             {% for calendar in my_calendars %}
                                             <li class="list-group-item ml-3">
                                                 {{ calendar.name }}
-                                                <a type="button" class="btn btn-sm btn-outline-secondary float-right" href="#">Anzeigen</a>
+                                                {% if selected_calendar != calendar.calendar_id %}
+                                                <a type="button" class="btn btn-sm btn-outline-secondary float-right" href="{% url 'home' %}?selected_calendar={{calendar.calendar_id}}">Anzeigen</a>
+                                                {% endif %}
                                             </li>
                                             {% endfor %}
                                         </ul>
+                                        <hr>
+                                    <h4>Event erstellen</h4>
+                                        <form method="post" class="mt-3">
+                                        {% csrf_token %}
+                                        <div class="form-label-group">
+                                            {% render_field event_createform.name class="form-control" id="id_name_event" %}
+                                            <label for="id_name_event">Name des Events:</label>
+                                            {{ event_createform.name.errors }}
+                                        </div>
+                                            <div class="form-label-group">
+                                            {% render_field event_createform.start_date class="form-control" %}
+                                            <label for="id_start_date">Beginn:</label>
+                                            {{ event_createform.start_date.errors }}
+                                        </div>
+                                            <div class="form-label-group">
+                                            {% render_field event_createform.end_date class="form-control" type="datetime-local" %}
+                                            <label for="id_end_date">Ende:</label>
+                                            {{ event_createform.end_date.errors }}
+                                        </div>
+                                            <div class="form-label-group">
+                                            {% render_field event_createform.event_type class="form-control" %}
+                                            {{ event_createform.event_type.errors }}
+                                        </div>
+
+                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create_event">Erstellen</button>
+                                        </form>
+                                    </div>
+
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="editcalendar" role="tabpanel" aria-labelledby="editcalendar-tab">
@@ -171,22 +202,31 @@
     </div>
 </div>
 
-{{ calendars|json_script:"calendar_data" }}
+{{ calendars|json_script:"calendar_data" }}{{ events|json_script:"events" }}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Initialize calendar
         var calendarEl = document.getElementById("calendar");
+        events = JSON.parse(document.getElementById("events").textContent);
         var calendar = new FullCalendar.Calendar(calendarEl, {
             themeSystem: "bootstrap",
             locale: "de",
             firstDay: 1,
             height: "100",
             initialView: "dayGridMonth",
+            eventSources: [
+                                // your event source
+                                {
+                                  events: events,
+                                  color: 'black',     // an option!
+                                  textColor: 'yellow' // an option!
+                                }
+                              ]
         });
         calendar.render();
 
         // Calendar edit form
-        calendars = JSON.parse(JSON.parse(document.getElementById("calendar_data").textContent));
+        calendars = JSON.parse(document.getElementById("calendar_data").textContent);
         input_calendars = document.getElementById("id_calendars");
         input_name = document.getElementById("id_name");
         input_visible_for = document.getElementById("id_visible_for");
@@ -206,7 +246,7 @@
 
     function calendarChanged() {
         calendars.forEach((element) => {
-            if (element.calendar_id === parseInt(input_calendars.value)) {
+            if (parseInt(element.calendar_id) === parseInt(input_calendars.value)) {
                 input_name.value = element.name;
                 input_visible_for.value = element.visible_for;
                 input_editable_by.value = element.editable_by;

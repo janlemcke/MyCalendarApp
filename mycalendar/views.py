@@ -1,15 +1,27 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from rest_framework.utils import json
 
-from mycalendar.forms import CalendarForm, CalendarEditForm
+from mycalendar.forms import CalendarForm, CalendarEditForm, EventCreateForm
 from mycalendar.models import Calendar
-from mycalendar.serializers import CalendarSerializer
+from mycalendar.serializers import CalendarSerializer, EventSerializer
+
+
+def getEventsForCalender(selected_calendar):
+    calendar = Calendar.objects.get(calendar_id=selected_calendar)
+    serializedEvents = EventSerializer(calendar.event_set.all(), many=True).data
+    return serializedEvents
 
 
 @login_required
 def homeView(request):
     context = {}
+    createEventForm = EventCreateForm()
+
+    # Events stuff
+    if "selected_calendar" in request.GET:
+        selected_calendar = request.GET["selected_calendar"]
+    else:
+        selected_calendar = Calendar.objects.filter(owner=request.user).first().calendar_id
 
     if request.POST:
         if request.POST['action'] == 'create':
@@ -28,12 +40,25 @@ def homeView(request):
             if calendar.owner == request.user:
                 calendar.delete()
 
+        if request.POST['action'] == "create_event":
+            form = EventCreateForm(request.POST)
+            if form.is_valid():
+                form.set_calendar(selected_calendar)
+                form.save()
+                createEventForm = EventCreateForm()
+            else:
+                createEventForm = form
+
+    # calendar stuff
     queryset = Calendar.objects.filter(owner=request.user.pk)
-    context["calendars"] = json.dumps(CalendarSerializer(queryset, many=True).data)
+    context["calendars"] = CalendarSerializer(queryset, many=True).data
 
     context["createform"] = CalendarForm()
     context["editform"] = CalendarEditForm(initial={"user_id": request.user.pk, "owner": request.user})
 
     context["my_calendars"] = queryset
+    context["events"] = getEventsForCalender(selected_calendar)
+    context["selected_calendar"] = int(selected_calendar)
+    context["event_createform"] = createEventForm
 
     return render(request, "home.html", context)
