@@ -106,6 +106,7 @@
                                             {% endfor %}
                                         </ul>
                                         <hr>
+                                    {% if calendars|length > 0 %}
                                     <h4>Event erstellen</h4>
                                         <form method="post" class="mt-3">
                                         {% csrf_token %}
@@ -115,7 +116,7 @@
                                             {{ event_createform.name.errors }}
                                         </div>
                                             <div class="form-label-group">
-                                            {% render_field event_createform.start_date class="form-control" %}
+                                            {% render_field event_createform.start_date class="form-control" type="datetime-local" %}
                                             <label for="id_start_date">Beginn:</label>
                                             {{ event_createform.start_date.errors }}
                                         </div>
@@ -131,6 +132,7 @@
 
                                         <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create_event">Erstellen</button>
                                         </form>
+                                    {% endif %}
                                     </div>
 
                                     </div>

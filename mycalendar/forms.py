@@ -2,7 +2,7 @@
 from django import forms
 from mycalendar.models import Calendar, Event
 from account.models import Account
-
+from django.db.models import Q
 
 class CalendarForm(forms.ModelForm):
     visible_for = forms.CharField(required=False)
@@ -38,7 +38,7 @@ class CalendarForm(forms.ModelForm):
 
 
 def get_calendars(user_id):
-    calendars = Calendar.objects.filter(owner=user_id)
+    calendars = Calendar.objects.filter(Q(owner=user_id) | Q(editable_by=user_id))
     choices = []
 
     for calendar in calendars:
@@ -84,7 +84,7 @@ class CalendarEditForm(CalendarForm):
 
 class EventCreateForm(forms.ModelForm):
 
-    start_date = forms.DateTimeField(input_formats=["%d.%m.%Y %H:%M"])
+    start_date = forms.DateTimeField(input_formats=["%d.%m.%Y %H:%M"], required=True)
     end_date = forms.DateTimeField(input_formats=["%d.%m.%Y %H:%M"], required=False)
 
     def set_calendar(self, calendar_id):
