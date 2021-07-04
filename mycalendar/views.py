@@ -68,6 +68,6 @@ def homeView(request):
     if firstCalendar:
         context["events"] = getEventsForCalender(selected_calendar)
         context["selected_calendar"] = int(selected_calendar)
-        context["event_createform"] = createEventForm
+    context["event_createform"] = createEventForm
 
     return render(request, "home.html", context)
