@@ -4,81 +4,89 @@
         border-style: none;
     }
 
-     /* The side navigation menu */
-.sidenav {
-  height: 100%; /* 100% Full-height */
-  width: 0; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
-  top: 0; /* Stay at the top */
-    right: 0;
-  background-color: gray; /* Black*/
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-}
+    /* The side navigation menu */
+    .sidenav {
+        height: 100%; /* 100% Full-height */
+        width: 0; /* 0 width - change this with JavaScript */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Stay on top */
+        top: 0; /* Stay at the top */
+        right: 0;
+        background-color: gray; /* Black*/
+        overflow-x: hidden; /* Disable horizontal scroll */
+        padding-top: 60px; /* Place content 60px from the top */
+        transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    }
 
-/* The navigation menu links */
-.sidenav a{
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 18px;
-  color: white;
-  display: block;
-  transition: 0.3s;
-}
+    /* The navigation menu links */
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 18px;
+        color: white;
+        display: block;
+        transition: 0.3s;
+    }
 
-.sidenav  h2{
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-  color: white;
-  display: block;
-  transition: 0.3s;
-}
+    .sidenav h2 {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        color: white;
+        display: block;
+        transition: 0.3s;
+    }
 
-/* When you mouse over the navigation links, change their color */
-.sidenav a:hover {
-  font-size: 24px;
-}
+    /* When you mouse over the navigation links, change their color */
+    .sidenav a:hover {
+        font-size: 24px;
+    }
 
-/* Position and style the close button (top right corner) */
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
+    /* Position and style the close button (top right corner) */
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
+    /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+    @media screen and (max-height: 450px) {
+        .sidenav {
+            padding-top: 15px;
+        }
+        .sidenav a {
+            font-size: 18px;
+        }
+    }
+
+    i.fa {
+        margin-left: 4px;
+        margin-right: 4px;
+    }
 </style>
 <div class="container-fluid">
     <div class="row">
         <div id="calendar" class="d-none d-md-flex col-md-4 col-lg-8 p-3"></div>
-        <div class="col-md-8 col-lg-4"  id="containerForSlideMenu">
-        <div id="mySidenav" class="sidenav">
-
-        <h2>Einstellungen</h2>
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-          <a href="#">Profil</a>
-            <a href="{% url 'logout' %}">Ausloggen</a>
-        </div>
+        <div class="col-md-8 col-lg-4" id="containerForSlideMenu">
+            <div id="mySidenav" class="sidenav">
+                <h2>Einstellungen</h2>
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#">Profil</a>
+                <a href="{% url 'logout' %}">Ausloggen</a>
+            </div>
             <div class="login d-flex py-3">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
-                        <div class="row my-2">
-                            <div class="col-md-9">
-                            <h1 class="login-heading mb-4 my-auto">MyCalendar App</h1>
+                            <div class="row my-2">
+                                <div class="col-md-9">
+                                    <h1 class="login-heading mb-4 my-auto">MyCalendar App</h1>
+                                </div>
+                                <div class="col-md-3 my-auto" onclick="openNav()" style="cursor: pointer;">
+                                    Settings
+                                </div>
                             </div>
-                            <div class="col-md-3 my-auto"  onclick="openNav()" style="cursor:pointer;">
-                                Settings
-                            </div>
-                        </div>
 
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
@@ -94,47 +102,44 @@
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade show active" id="mycalendars" role="tabpanel" aria-labelledby="mycalendars-tab">
                                     <div class="row mt-3">
-                                    <div class=" col-md-12">
-                                        <ul class="list-group">
-                                            {% for calendar in my_calendars %}
-                                            <li class="list-group-item ml-3">
-                                                {{ calendar.name }}
-                                                {% if selected_calendar != calendar.calendar_id %}
-                                                <a type="button" class="btn btn-sm btn-outline-secondary float-right" href="{% url 'home' %}?selected_calendar={{calendar.calendar_id}}">Anzeigen</a>
-                                                {% endif %}
-                                            </li>
-                                            {% endfor %}
-                                        </ul>
-                                        <hr>
-                                    {% if calendars|length > 0 %}
-                                    <h4>Event erstellen</h4>
-                                        <form method="post" class="mt-3">
-                                        {% csrf_token %}
-                                        <div class="form-label-group">
-                                            {% render_field event_createform.name class="form-control" id="id_name_event" %}
-                                            <label for="id_name_event">Name des Events:</label>
-                                            {{ event_createform.name.errors }}
-                                        </div>
-                                            <div class="form-label-group">
-                                            {% render_field event_createform.start_date class="form-control" type="datetime-local" %}
-                                            <label for="id_start_date">Beginn:</label>
-                                            {{ event_createform.start_date.errors }}
-                                        </div>
-                                            <div class="form-label-group">
-                                            {% render_field event_createform.end_date class="form-control" type="datetime-local" %}
-                                            <label for="id_end_date">Ende:</label>
-                                            {{ event_createform.end_date.errors }}
-                                        </div>
-                                            <div class="form-label-group">
-                                            {% render_field event_createform.event_type class="form-control" %}
-                                            {{ event_createform.event_type.errors }}
-                                        </div>
+                                        <div class="col-md-12">
+                                            <ul class="list-group">
+                                                {% for calendar in my_calendars %}
+                                                <li class="list-group-item ml-3">
+                                                    {{ calendar.name }} {% if selected_calendar != calendar.calendar_id %}
+                                                    <a type="button" class="btn btn-sm btn-outline-secondary float-right" href="{% url 'home' %}?selected_calendar={{calendar.calendar_id}}">Anzeigen</a>
+                                                    {% endif %}
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                            <hr />
+                                            {% if calendars|length > 0 %}
+                                            <h4>Event erstellen</h4>
+                                            <form method="post" class="mt-3">
+                                                {% csrf_token %}
+                                                <div class="form-label-group">
+                                                    {% render_field event_createform.name class="form-control" id="id_name_event" %}
+                                                    <label for="id_name_event">Name des Events:</label>
+                                                    {{ event_createform.name.errors }}
+                                                </div>
+                                                <div class="form-label-group">
+                                                    {% render_field event_createform.start_date class="form-control" type="datetime-local" %}
+                                                    <label for="id_start_date">Beginn:</label>
+                                                    {{ event_createform.start_date.errors }}
+                                                </div>
+                                                <div class="form-label-group">
+                                                    {% render_field event_createform.end_date class="form-control" type="datetime-local" %}
+                                                    <label for="id_end_date">Ende:</label>
+                                                    {{ event_createform.end_date.errors }}
+                                                </div>
+                                                <div class="form-label-group">
+                                                    {% render_field event_createform.event_type class="form-control" %} {{ event_createform.event_type.errors }}
+                                                </div>
 
-                                        <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create_event">Erstellen</button>
-                                        </form>
-                                    {% endif %}
-                                    </div>
-
+                                                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create_event">Erstellen</button>
+                                            </form>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="editcalendar" role="tabpanel" aria-labelledby="editcalendar-tab">
@@ -210,6 +215,47 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="eventEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" class="mt-3">
+                    {% csrf_token %}
+                    {{ event_editform.event_id.as_hidden }}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Event bearbeiten</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-label-group">
+                            {% render_field event_editform.name class="form-control" id="id_name_edit_event" %}
+                            <label for="id_name_edit_event">Name des Events:</label>
+                            {{ event_editform.name.errors }}
+                        </div>
+                        <div class="form-label-group">
+                            {% render_field event_editform.start_date class="form-control" type="datetime-local" id="id_edit_start_date" %}
+                            <label for="id_edit_start_date">Beginn:</label>
+                            {{ event_editform.start_date.errors }}
+                        </div>
+                        <div class="form-label-group">
+                            {% render_field event_editform.end_date class="form-control" type="datetime-local" id="id_edit_end_date" %}
+                            <label for="id_edit_end_date">Ende:</label>
+                            {{ event_editform.end_date.errors }}
+                        </div>
+                        <div class="form-label-group">
+                            {% render_field event_editform.event_type class="form-control" id="id_edit_event_type" %} {{ event_editform.event_type.errors }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                        <button class="btn btn-primary" type="submit" name="action" value="edit_event">Änderung übernehmen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 {{ calendars|json_script:"calendar_data" }}{{ events|json_script:"events" }}
@@ -224,14 +270,38 @@
             firstDay: 1,
             height: "100",
             initialView: "dayGridMonth",
+            weekNumbers: true,
             eventSources: [
-                                // your event source
-                                {
-                                  events: events,
-                                  color: 'black',     // an option!
-                                  textColor: 'yellow' // an option!
-                                }
-                              ]
+                // your event source
+                {
+                    events: events
+                },
+            ],
+            eventContent: function (args, createElement) {
+                const icon = args.event._def.extendedProps.icon;
+                const timeString = convertDatetimeForDisplay(args.event._instance.range.start);
+                const title = args.event._def.title;
+                return {
+                    html: "<i class='fa fa-" + icon + "'></i><div class='fc-event-time'>" + timeString + "</div> <div class='fc-event-title' data-toggle='tooltip' title='" + title + "'>" + title + "</div>",
+                };
+            },
+            eventClick: function (info) {
+                console.log(info.event);
+                edit_event_name = document.getElementById("id_name_edit_event");
+                edit_event_start = document.getElementById("id_edit_start_date");
+                edit_event_end = document.getElementById("id_edit_end_date");
+                edit_event_type = document.getElementById("id_edit_event_type");
+                edit_event_id= document.getElementById("id_event_id");
+                edit_event_id.value = info.event._def.extendedProps.event_id;
+                edit_event_name.value = info.event.title;
+                edit_event_start.value = convertDatetimeForEdit(info.event.start);
+                if(info.event.end != null)
+                    edit_event_end.value = convertDatetimeForEdit(info.event.end);
+                edit_event_type.value = info.event._def.extendedProps.event_type;
+
+
+                $("#eventEditModal").modal("show");
+            },
         });
         calendar.render();
 
@@ -266,15 +336,41 @@
     }
 
     /* Set the width of the side navigation to 250px */
-function openNav() {
-  container = document.getElementById("containerForSlideMenu").getBoundingClientRect();
-  slider =   document.getElementById("mySidenav");
-  slider.style.width = container.width+"px";
-}
+    function openNav() {
+        container = document.getElementById("containerForSlideMenu").getBoundingClientRect();
+        slider = document.getElementById("mySidenav");
+        slider.style.width = container.width + "px";
+    }
 
-/* Set the width of the side navigation to 0 */
-function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
-}
+    /* Set the width of the side navigation to 0 */
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="popover"]').popover();
+    });
+
+    function convertDatetimeForEdit(startTime){
+        let timeString = startTime.getDate() + "." + (startTime.getMonth()+1) + "." + startTime.getFullYear() + " ";
+        timeString += startTime.getHours() + ":";
+        if (startTime.getMinutes() < 9) {
+            timeString += "0" + startTime.getMinutes();
+        } else {
+            timeString += startTime.getMinutes();
+        }
+        return timeString;
+    }
+
+    function convertDatetimeForDisplay(startTime){
+        let timeString = startTime.getUTCHours() + ":";
+        if (startTime.getMinutes() < 9) {
+            timeString += "0" + startTime.getMinutes();
+        } else {
+            timeString += startTime.getMinutes();
+        }
+        return timeString;
+    }
 </script>
 {% endblock content %}

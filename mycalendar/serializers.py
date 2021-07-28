@@ -21,6 +21,13 @@ class EventSerializer(serializers.ModelSerializer):
     title  = serializers.SerializerMethodField("get_title")
     start = serializers.SerializerMethodField("get_start")
     end = serializers.SerializerMethodField("get_end")
+    icon = serializers.SerializerMethodField("get_icon")
+
+    def get_icon(self, obj):
+        if obj.event_type == "AR":
+            return "briefcase"
+        else:
+            return "tree"
 
     def get_title(self, obj):
         return obj.name
@@ -33,4 +40,4 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ("title","start","end")
+        fields = ("title","start","end","icon","event_id","event_type")
