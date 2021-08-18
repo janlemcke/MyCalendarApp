@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from mycalendar.models import Calendar, Event
+from mycalendar.models import Calendar, Event,RecurrentEvent
 
 
 class CalendarSerializer(serializers.ModelSerializer):
@@ -15,6 +15,32 @@ class CalendarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calendar
         exclude = ("owner",)
+
+class RecurrentEventSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField("get_title")
+    rrule = serializers.SerializerMethodField("get_rrule")
+    icon = serializers.SerializerMethodField("get_icon")
+
+    def get_title(self, obj):
+        return obj.name
+
+    def get_rrule(self, obj):
+        rrule = {}
+        rrule["freq"] = "weekly"
+        rrule["interval"] = 3
+        rrule["dtstart"] = obj.start_date
+        rrule["until"] = "2021-10-18"
+        return rrule
+
+    def get_icon(self, obj):
+        if obj.event_type == "AR":
+            return "briefcase"
+        else:
+            return "tree"
+
+    class Meta:
+        model = RecurrentEvent
+        fields = ("title","rrule","icon","event_id","event_type")
 
 class EventSerializer(serializers.ModelSerializer):
 

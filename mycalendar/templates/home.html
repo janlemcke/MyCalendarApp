@@ -135,7 +135,24 @@
                                                 <div class="form-label-group">
                                                     {% render_field event_createform.event_type class="form-control" %} {{ event_createform.event_type.errors }}
                                                 </div>
+                                                <div id="accordion" class="mb-4">
+                                                  <div class="card">
+                                                    <div class="card-header" id="headingOne">
+                                                      <div class="mb-0">
+                                                          <input class="form-check-input mx-1" type="checkbox" value="" id="defaultCheck1" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                          <label class="form-check-label mx-4" for="defaultCheck1">
+                                                            Wiederkehrendes Event
+                                                          </label>
+                                                      </div>
+                                                    </div>
 
+                                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                                      <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
                                                 <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="action" value="create_event">Erstellen</button>
                                             </form>
                                             {% endif %}
@@ -267,6 +284,7 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             themeSystem: "bootstrap",
             locale: "de",
+            timeZone: 'Germany/Berlin',
             firstDay: 1,
             height: "100",
             initialView: "dayGridMonth",
@@ -302,6 +320,11 @@
 
                 $("#eventEditModal").modal("show");
             },
+            /*dayCellContent: function ( date, cell) {
+                return {
+                    html: date.dayNumberText + "<i class='fa fa-tree''></i>"
+                };
+            },*/
         });
         calendar.render();
 
@@ -364,7 +387,7 @@
     }
 
     function convertDatetimeForDisplay(startTime){
-        let timeString = startTime.getUTCHours() + ":";
+        let timeString = startTime.getHours() + ":";
         if (startTime.getMinutes() < 9) {
             timeString += "0" + startTime.getMinutes();
         } else {

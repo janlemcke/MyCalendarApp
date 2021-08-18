@@ -29,3 +29,9 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+class RecurrentEvent(Event):
+    FREQ_CHOICES = [("YE","Jährlich"),("MO","Monatlich"),("WE","Wöchentlich"),("DA","Täglich"),("HO","Stündlich")]
+
+    frequence = models.CharField(max_length=2, choices=FREQ_CHOICES, default="WE")
+    interval = models.PositiveSmallIntegerField()

@@ -3,13 +3,13 @@ from django.shortcuts import render
 
 from mycalendar.forms import CalendarForm, CalendarEditForm, EventCreateForm, EventEditForm
 from mycalendar.models import Calendar
-from mycalendar.serializers import CalendarSerializer, EventSerializer
+from mycalendar.serializers import CalendarSerializer, EventSerializer, RecurrentEventSerializer
 from django.db.models import Q
 
 
 def getEventsForCalender(selected_calendar):
     calendar = Calendar.objects.get(calendar_id=selected_calendar)
-    serializedEvents = EventSerializer(calendar.event_set.all(), many=True).data
+    serializedEvents = RecurrentEventSerializer(calendar.event_set.all(), many=True).data
     return serializedEvents
 
 
