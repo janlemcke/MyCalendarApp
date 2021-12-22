@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from mycalendar.models import Calendar, Event
+from mycalendar.models import Calendar, Event, RecurrentEvent
 from account.models import Account
 from django.db.models import Q
+
 
 class CalendarForm(forms.ModelForm):
     visible_for = forms.CharField(required=False)
@@ -82,8 +83,8 @@ class CalendarEditForm(CalendarForm):
 
         return calendar
 
-class EventCreateForm(forms.ModelForm):
 
+class EventCreateForm(forms.ModelForm):
     start_date = forms.DateTimeField(input_formats=["%d.%m.%Y %H:%M"], required=True)
     end_date = forms.DateTimeField(input_formats=["%d.%m.%Y %H:%M"], required=False)
 
@@ -96,12 +97,11 @@ class EventCreateForm(forms.ModelForm):
         model = Event
         exclude = ('calendar',)
 
-class EventEditForm(forms.ModelForm):
 
+class EventEditForm(forms.ModelForm):
     start_date = forms.DateTimeField(input_formats=["%d.%m.%Y %H:%M"], required=True)
     end_date = forms.DateTimeField(input_formats=["%d.%m.%Y %H:%M"], required=False)
     event_id = forms.CharField(required=True)
-
 
     def save(self, commit=True):
         event = Event.objects.get(event_id=self.cleaned_data["event_id"])
@@ -114,7 +114,18 @@ class EventEditForm(forms.ModelForm):
 
         return event
 
-
     class Meta:
         model = Event
         exclude = ("calendar",)
+
+
+class RecurrentEventCreateForm(EventCreateForm):
+    start_date = None
+    end_date = None
+
+    frequence = forms.ChoiceField(label="Frequenz", choices=RecurrentEvent.FREQ_CHOICES, required=False)
+    interval = forms.IntegerField(label="Intervall", min_value=0, required=False)
+
+    class Meta:
+        model = RecurrentEvent
+        fields = ("frequence", "interval")

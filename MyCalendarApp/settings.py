@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 # Application definition
 INSTALLED_APPS = [
     'account',
@@ -36,6 +38,7 @@ INSTALLED_APPS = [
 
     'widget_tweaks',
     'rest_framework',
+    'crispy_forms',
 
     'django.contrib.admin',
     'django.contrib.auth',

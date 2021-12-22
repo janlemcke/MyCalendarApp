@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% load widget_tweaks %} {% block content %}
+{% extends 'base.html' %}
+{% load crispy_forms_filters %} {% load widget_tweaks %} {% block content %}
 <style>
     td {
         border-style: none;
@@ -139,7 +140,7 @@
                                                   <div class="card">
                                                     <div class="card-header" id="headingOne">
                                                       <div class="mb-0">
-                                                          <input class="form-check-input mx-1" type="checkbox" value="" id="defaultCheck1" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                          <input class="form-check-input mx-1" type="checkbox" value="" id="rec_checkbox" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                           <label class="form-check-label mx-4" for="defaultCheck1">
                                                             Wiederkehrendes Event
                                                           </label>
@@ -148,7 +149,7 @@
 
                                                     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                                                       <div class="card-body">
-                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                                        {{ recurrent_event_createform|crispy }}
                                                       </div>
                                                     </div>
                                                   </div>

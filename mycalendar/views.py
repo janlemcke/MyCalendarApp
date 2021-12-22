@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from mycalendar.forms import CalendarForm, CalendarEditForm, EventCreateForm, EventEditForm
+from mycalendar.forms import CalendarForm, CalendarEditForm, EventCreateForm, EventEditForm,RecurrentEventCreateForm
 from mycalendar.models import Calendar
 from mycalendar.serializers import CalendarSerializer, EventSerializer, RecurrentEventSerializer
 from django.db.models import Q
@@ -17,7 +17,10 @@ def getEventsForCalender(selected_calendar):
 def homeView(request):
     context = {}
     createEventForm = EventCreateForm()
+    createRecurrentEventForm = RecurrentEventCreateForm()
     editEventForm = EventEditForm()
+
+
 
     # Events stuff
     if "selected_calendar" in request.GET:
@@ -65,6 +68,15 @@ def homeView(request):
             else:
                 editEventForm = form
 
+        if request.POST['action'] == "create_recurrent_event":
+            form = RecurrentEventCreateForm(request.POST)
+            if form.is_valid():
+                form.set_calendar(selected_calendar)
+                form.save()
+                createRecurrentEventForm = RecurrentEventCreateForm()
+            else:
+                createRecurrentEventForm = form
+
     # calendar stuff
     queryset_visible = Calendar.objects.filter(Q(owner=request.user.pk) | Q(visible_for=request.user))
     queryset_editable = Calendar.objects.filter(Q(owner=request.user.pk) | Q(editable_by=request.user))
@@ -78,6 +90,7 @@ def homeView(request):
         context["events"] = getEventsForCalender(selected_calendar)
         context["selected_calendar"] = int(selected_calendar)
     context["event_createform"] = createEventForm
+    context["recurrent_event_createform"] = createRecurrentEventForm
     context["event_editform"] = editEventForm
 
     return render(request, "home.html", context)
